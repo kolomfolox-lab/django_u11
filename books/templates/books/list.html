@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Books List</h2>
+{% if request.user.is_authenticated %}
+<a href="{% url 'book_create' %}">Create New Book</a>
+{% endif %}
+<ul>
+    {% for book in books %}
+    <li>
+        <a href="{% url 'book_detail' book.pk %}">{{ book.title }}</a> by {{ book.author }} - ${{ book.price }}
+        {% if request.user.is_authenticated %}
+        (<a href="{% url 'book_update' book.pk %}">Edit</a> | <a href="{% url 'book_delete' book.pk %}">Delete</a>)
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

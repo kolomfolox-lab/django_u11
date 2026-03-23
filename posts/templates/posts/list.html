@@ -1,10 +1,25 @@
 {% extends "base.html" %}
+{% load i18n %}
 
 {% block content %}
-<h2>Posts</h2>
+<h2>{% trans "Post List" %}</h2>
+{% if perms.posts.add_post %}
+    <a href="{% url 'post_create' %}">Create New Post</a>
+{% endif %}
 <ul>
     {% for post in page_obj %}
-    <li>{{ post.title }} - {{ post.created_at }}</li>
+    <li>
+        {{ post.title }} - {{ post.created_at }}
+        {% if post.image %}
+            <br><img src="{{ post.image.url }}" alt="{{ post.title }}" width="150">
+        {% endif %}
+        {% if perms.posts.change_post %}
+            <a href="{% url 'post_edit' post.id %}">Edit</a>
+        {% endif %}
+        {% if perms.posts.delete_post %}
+            <a href="{% url 'post_delete' post.id %}">Delete</a>
+        {% endif %}
+    </li>
     {% empty %}
     <li>No posts found.</li>
     {% endfor %}

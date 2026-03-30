@@ -36,17 +36,24 @@ from django.utils import timezone
 from .models import VerificationCode
 from .utils import send_email_thread
 
+from django.contrib import messages
+
 def forgot_password_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         try:
             from django.contrib.auth.models import User
             user = User.objects.get(username=username)
+            if not user.email:
+                messages.error(request, "Ushbu foydalanuvchida email ko'rsatilmagan! Administratorga murojaat qiling.")
+                return render(request, 'accounts/forgot_password.html')
+            
             code_obj = VerificationCode.objects.create(user=user)
             send_email_thread('Parolni tiklash', f'Code: {code_obj.code}', [user.email])
+            messages.success(request, "OTP code terminalga yuborildi!")
             return redirect('restore_password')
         except User.DoesNotExist:
-            pass
+            messages.error(request, "Bunday foydalanuvchi topilmadi!")
     return render(request, 'accounts/forgot_password.html')
 
 def restore_password_view(request):
@@ -63,7 +70,22 @@ def restore_password_view(request):
                     user.set_password(new_password)
                     user.save()
                     code_obj.delete()
+                    messages.success(request, "Parol muvaffaqiyatli o'zgartirildi!")
                     return redirect('login')
+                else:
+                    messages.error(request, "Kod muddati o'tgan!")
             except VerificationCode.DoesNotExist:
-                pass
+                messages.error(request, "Kod noto'g'ri!")
+        else:
+            messages.error(request, "Parollar mos kelmadi!")
     return render(request, 'accounts/restore_password.html')
+
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def profile_view(request):
+    return render(request, 'accounts/profile.html')
+
+def home_view(request):
+    return render(request, 'accounts/home.html')
+

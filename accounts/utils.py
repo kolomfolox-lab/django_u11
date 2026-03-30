@@ -9,13 +9,16 @@ class EmailThread(threading.Thread):
         threading.Thread.__init__(self)
 
     def run(self):
-        send_mail(
-            self.subject,
-            self.message,
-            'from@example.com',
-            self.recipient_list,
-            fail_silently=False,
-        )
+        try:
+            send_mail(
+                self.subject,
+                self.message,
+                'a39307503@gmail.com',
+                self.recipient_list,
+                fail_silently=False,
+            )
+        except Exception as e:
+            print(f"SMTP Error: {e}")
 
 def send_email_thread(subject, message, recipient_list):
     EmailThread(subject, message, recipient_list).start()

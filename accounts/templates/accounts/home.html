@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>U11 Project</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+            text-align: center;
+        }
+        .container {
+            border: 1px solid #ccc;
+            padding: 30px;
+            width: 500px;
+            margin: 0 auto;
+        }
+        .btn {
+            display: inline-block;
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .btn-outline {
+            background-color: white;
+            color: #333;
+            border: 1px solid #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        {% if user.is_authenticated %}
+            <p>Xush kelibsiz, {{ user.username }}!</p>
+        {% endif %}
+
+        <h1>U11 Loyihasi</h1>
+        <p>Platformamizga xush kelibsiz. Tizimdan foydalanish uchun kiring.</p>
+
+        <a href="{% url 'post_list' %}" class="btn">Postlar</a>
+        
+        {% if user.is_authenticated %}
+            <a href="{% url 'profile' %}" class="btn btn-outline">Profil</a>
+        {% else %}
+            <a href="{% url 'login' %}" class="btn btn-outline">Kirish</a>
+        {% endif %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil: {{ user.username }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+            text-align: center;
+        }
+        .profile-card {
+            border: 1px solid #ccc;
+            padding: 30px;
+            width: 400px;
+            margin: 0 auto;
+            border-radius: 5px;
+        }
+        .avatar {
+            font-size: 50px;
+            background-color: #eee;
+            width: 100px;
+            height: 100px;
+            line-height: 100px;
+            border-radius: 50px;
+            margin: 0 auto 20px;
+        }
+        .btn {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 3px;
+        }
+        .btn-danger {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="profile-card">
+        <div class="avatar">{{ user.username|make_list|first|upper }}</div>
+        
+        <h2>@{{ user.username }}</h2>
+        <p>Email: {{ user.email }}</p>
+
+        <p>Qo'shilgan: {{ user.date_joined|date:"M Y" }}</p>
+        <p>Rol: {% if user.is_staff %}Admin{% else %}Foydalanuvchi{% endif %}</p>
+
+        <a href="{% url 'post_list' %}" class="btn">Postlar ro'yxati</a>
+        
+        <form method="post" action="{% url 'logout' %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger" style="border:none;cursor:pointer;">Chiqish</button>
+        </form>
+    </div>
+</body>
+</html>

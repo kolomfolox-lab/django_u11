@@ -5,3 +5,5 @@ __pycache__/
 *.class
 normativ.txt
 .env
+normativ.txt
+requests.log
